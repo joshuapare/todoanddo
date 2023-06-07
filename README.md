@@ -12,19 +12,22 @@ The app consists of multiple microservices, each serving a specific purpose and 
 
 - 🖥️ Frontend (Next.js): The user interface for managing todos.
 - ✅ Todo Service (NestJS):
-  - 💾 Backend Database: MongoDB for storing and managing todo data.
+  - 🥭 Backend Database: MongoDB for storing and managing todo data.
+  - 🚀 Caching: Redis for caching frequently accessed user data.
 - 👤 User Service (NestJS):
-  - 💾 Backend Database: MySQL database for user data storage.
+  - 🐬 Backend Database: MySQL database for user data storage.
+  - 👵 ORM: Sequelize for object-relational mapping.
   - 🚀 Caching: Redis for caching frequently accessed user data.
 - 💡 Quote Service (Node.js/Express):
   - 🔗 External API: Fetches inspirational quotes from a public API.
 - 🔒 Auth Service (Go Fiber):
+  - 🐘 Backend Database: MySQL for storing user authentication data.
   - 🚀 Caching: Redis for caching user authentication tokens.
-  - 💾 Backend Database: MySQL for storing user authentication data.
   - 🔐 JWT: JSON Web Tokens for authentication and authorization.
 - 📡 Events Service (NestJS):
   - 📶 Socket.IO: Enables real-time event-driven communication between microservices.
-  - 🚀 Caching: Redis for storing and retrieving event-related data.
+  - 🛕 ORM: Prisma for awesome type-safe database access.
+  - 🔌 Adapter: Redis for distributed orchestration of sockets.
 
 ## Getting Started
 

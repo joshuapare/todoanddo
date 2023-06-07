@@ -3,9 +3,11 @@ version: "3.9"
 volumes:
   redis:
     driver: local
-  auth-db:
+  pg-db:
     driver: local
   mysql-db:
+    driver: local
+  mongo-db:
     driver: local
 
 services:
@@ -74,7 +76,7 @@ services:
     volumes:
       - mysql-db:/var/lib/mysql
 
-  auth-db:
+  postgres:
     image: postgres:14.1-alpine
     restart: always
     environment:
@@ -83,7 +85,7 @@ services:
     ports:
       - '15432:5432'
     volumes: 
-      - auth-db:/var/lib/postgresql/data
+      - pg-db:/var/lib/postgresql/data
 
   redis:
     image: redis:6.2-alpine
@@ -93,3 +95,20 @@ services:
     command: redis-server --save 20 1 --loglevel warning
     volumes: 
       - redis:/data
+
+  mongo:
+    image: mongo:6.0.2
+    ports:
+      - "27717:27017"
+    volumes:
+      - mongo-db:/data/db
+    command: --quiet --logpath /dev/null
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

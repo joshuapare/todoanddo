@@ -128,3 +128,15 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# User specific files
+user-svc/node_modules
+user-svc/dist
+
+auth-svc/node_modules
+auth-svc/dist
+
+ui/node_modules
+ui/dist
+ui/.next

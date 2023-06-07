@@ -62,6 +62,16 @@ services:
     ports:
       - "3334:3000"
 
+  quote-svc:
+    build:
+      context: ./quote-svc
+      target: dev
+    volumes:
+      - ./todo-svc/src:/app/src
+      - ./todo-svc/tests:/app/tests
+    ports:
+      - "3335:3000"
+
 # DATABASES
   mysql:
     image: mysql:8

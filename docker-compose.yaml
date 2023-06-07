@@ -1,7 +1,12 @@
 version: "3.9"
 
 volumes:
-  redis-data:
+  redis:
+    driver: local
+  auth-db:
+    driver: local
+  mysql-db:
+    driver: local
 
 services:
   ui:
@@ -16,10 +21,75 @@ services:
 
   user-svc:
     build:
-      context: ./user-service
+      context: ./user-svc
       target: dev
     volumes:
       - ./user-svc/src:/app/src
       - ./user-svc/public:/app/public
     ports:
-      - "3330:3000"
+      - "3331:3000"
+
+  auth-svc:
+    build:
+      context: ./auth-svc
+      target: dev
+    volumes:
+      - ./auth-svc:/app
+    env_file:
+      - ./auth-svc/.env
+    ports:
+      - "3332:5000"
+
+  events-svc:
+    build:
+      context: ./events-svc
+      target: dev
+    volumes:
+      - ./events-svc/src:/app/src
+      - ./events-svc/public:/app/public
+    ports:
+      - "3333:3000"
+
+  todo-svc:
+    build:
+      context: ./todo-svc
+      target: dev
+    volumes:
+      - ./todo-svc/src:/app/src
+      - ./todo-svc/public:/app/public
+    ports:
+      - "3334:3000"
+
+# DATABASES
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'events'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '13306:3306'
+    volumes:
+      - mysql-db:/var/lib/mysql
+
+  auth-db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '15432:5432'
+    volumes: 
+      - auth-db:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '16379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes: 
+      - redis:/data

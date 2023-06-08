@@ -11,8 +11,8 @@ import {
   OnModuleDestroy,
   Inject,
 } from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
+import { ClientKafka, RpcException } from '@nestjs/microservices';
+import { catchError, lastValueFrom, throwError } from 'rxjs';
 
 @Controller('todo')
 export class TodoController implements OnModuleInit, OnModuleDestroy {
@@ -39,8 +39,13 @@ export class TodoController implements OnModuleInit, OnModuleDestroy {
 
   @Post()
   async create(@Body() data: Record<string, unknown>) {
-    const result = await lastValueFrom(this.client.send('todo.create', data));
-    return result;
+    return this.client
+      .send('todo.create', data)
+      .pipe(
+        catchError((error) =>
+          throwError(() => new RpcException(error.response)),
+        ),
+      );
   }
 
   @Get()

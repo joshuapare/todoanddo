@@ -22,6 +22,7 @@ export class TodoController implements OnModuleInit, OnModuleDestroy {
     const requestPatterns = [
       'todo.create',
       'todo.find',
+      'todo.find.one',
       'todo.update',
       'todo.delete',
     ];
@@ -39,43 +40,40 @@ export class TodoController implements OnModuleInit, OnModuleDestroy {
 
   @Post()
   async create(@Body() data: Record<string, unknown>) {
-    return this.client
-      .send('todo.create', data)
-      .pipe(
-        catchError((error) =>
-          throwError(() => new RpcException(error.response)),
-        ),
-      );
+    return lastValueFrom(this.client.send('todo.create', data));
   }
 
   @Get()
   async find(@Query() data: Record<string, unknown>) {
-    const result = await lastValueFrom(this.client.send('todo.find', data));
-    return result;
+    return lastValueFrom(this.client.send('todo.find', data));
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-    @Query() data: Record<string, unknown>,
-  ) {
-    const result = await lastValueFrom(
-      this.client.send('todo.find', { id, ...data }),
-    );
-    return result;
+  async findOne(@Param('id') id: string) {
+    return lastValueFrom(this.client.send('todo.find.one', { id }));
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() data: Record<string, unknown>) {
-    const result = await lastValueFrom(
-      this.client.send('todo.update', { id, ...data }),
-    );
-    return result;
+    return lastValueFrom(this.client.send('todo.update', { id, ...data }));
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    const result = await lastValueFrom(this.client.send('todo.delete', { id }));
-    return result;
+    return lastValueFrom(this.client.send('todo.delete', { id }));
+  }
+
+  @Patch(':id/complete')
+  async markComplete(@Param('id') id: string) {
+    return lastValueFrom(
+      this.client.send('todo.update', { id, completed: true }),
+    );
+  }
+
+  @Patch(':id/incomplete')
+  async markIncomplete(@Param('id') id: string) {
+    return lastValueFrom(
+      this.client.send('todo.update', { id, completed: false }),
+    );
   }
 }

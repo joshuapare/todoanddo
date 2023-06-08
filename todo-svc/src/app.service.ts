@@ -33,7 +33,9 @@ export class AppService {
   }
 
   async handleUpdateTodo(data: UpdateTodoDto) {
-    const todo = await this.todoModel.findByIdAndUpdate(data.id, data);
+    const todo = await this.todoModel.findById(data.id);
+    todo.set(data);
+    await todo.save();
     return { success: true, data: todo };
   }
 

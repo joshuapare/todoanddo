@@ -7,22 +7,46 @@ import {
   Param,
   Delete,
   Query,
+  OnModuleInit,
+  OnModuleDestroy,
+  Inject,
 } from '@nestjs/common';
-import { TodoService } from './todo.service';
+import { ClientKafka } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Controller('todo')
-export class TodoController {
-  constructor(private readonly todoService: TodoService) {}
+export class TodoController implements OnModuleInit, OnModuleDestroy {
+  constructor(@Inject('TODO_SERVICE') private readonly client: ClientKafka) {}
+
+  async onModuleInit() {
+    const requestPatterns = [
+      'todo.create',
+      'todo.find',
+      'todo.update',
+      'todo.delete',
+    ];
+
+    requestPatterns.forEach((pattern) => {
+      this.client.subscribeToResponseOf(pattern);
+    });
+
+    await this.client.connect();
+  }
+
+  async onModuleDestroy() {
+    await this.client.close();
+  }
 
   @Post()
   async create(@Body() data: Record<string, unknown>) {
-    this.todoService.create(data);
+    const result = await lastValueFrom(this.client.send('todo.create', data));
+    return result;
   }
 
   @Get()
   async find(@Query() data: Record<string, unknown>) {
-    console.log('data', data);
-    this.todoService.find(data);
+    const result = await lastValueFrom(this.client.send('todo.find', data));
+    return result;
   }
 
   @Get(':id')
@@ -30,16 +54,23 @@ export class TodoController {
     @Param('id') id: string,
     @Query() data: Record<string, unknown>,
   ) {
-    this.todoService.find({ id, ...data });
+    const result = await lastValueFrom(
+      this.client.send('todo.find', { id, ...data }),
+    );
+    return result;
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() data: Record<string, unknown>) {
-    this.todoService.update({ id, ...data });
+    const result = await lastValueFrom(
+      this.client.send('todo.update', { id, ...data }),
+    );
+    return result;
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    this.todoService.delete(id);
+    const result = await lastValueFrom(this.client.send('todo.delete', { id }));
+    return result;
   }
 }

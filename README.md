@@ -11,6 +11,8 @@
 The app consists of multiple microservices, each serving a specific purpose and implemented using different frameworks and technologies. Here's a brief overview of the microservices and their associated components:
 
 - 🖥️ Frontend (Next.js): The user interface for managing todos.
+- 🌐 API Gateway (NestJS, eventually Drogon):
+  - 📡 Kafka Integration: Acts as an API gateway and publishes requests into Kafka topics for processing by other microservices.
 - ✅ Todo Service (NestJS):
   - 🥭 Backend Database: MongoDB for storing and managing todo data.
   - 🚀 Caching: Redis for caching frequently accessed user data.

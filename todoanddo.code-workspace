@@ -1,0 +1,39 @@
+{
+  "folders": [
+    {
+      "name": "API Gateway",
+      "path": "./api-gateway"
+    },
+    {
+      "name": "Todo Service",
+      "path": "./todo-svc"
+    },
+    {
+      "name": "Auth Service",
+      "path": "./auth-svc"
+    },
+    {
+      "name": "Events Service",
+      "path": "./events-svc"
+    },
+    {
+      "name": "Quote Service",
+      "path": "./quote-svc"
+    },
+    {
+      "name": "User Service",
+      "path": "./user-svc"
+    },
+    {
+      "name": "UI",
+      "path": "./ui"
+    }
+  ],
+  "settings": {
+    "jest.disabledWorkspaceFolders": [
+      "Quote Service",
+      "UI",
+      "Auth Service"
+    ]
+  }
+}

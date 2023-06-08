@@ -8,18 +8,18 @@ export class TodoService {
   ) {}
 
   create(data: Record<string, unknown>) {
-    this.todoClient.emit('create_todo', data);
+    this.todoClient.emit('todo.create', data);
   }
 
   find(data: Record<string, unknown>) {
-    this.todoClient.send('find_todo', data);
+    this.todoClient.emit('todo.find', data);
   }
 
   update(data: Record<string, unknown>) {
-    this.todoClient.emit('update_todo', data);
+    this.todoClient.emit('todo.update', data);
   }
 
   delete(id: string) {
-    this.todoClient.emit('delete_todo', id);
+    this.todoClient.emit('todo.delete', id);
   }
 }

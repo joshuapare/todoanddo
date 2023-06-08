@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
 
@@ -15,29 +16,30 @@ export class TodoController {
 
   @Post()
   async create(@Body() data: Record<string, unknown>) {
-    return this.todoService.create(data);
+    this.todoService.create(data);
   }
 
   @Get()
-  async find(@Param() data: Record<string, unknown>) {
-    return this.todoService.find(data);
+  async find(@Query() data: Record<string, unknown>) {
+    console.log('data', data);
+    this.todoService.find(data);
   }
 
   @Get(':id')
   async findOne(
     @Param('id') id: string,
-    @Param() data: Record<string, unknown>,
+    @Query() data: Record<string, unknown>,
   ) {
-    return this.todoService.find({ id, ...data });
+    this.todoService.find({ id, ...data });
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() data: Record<string, unknown>) {
-    return this.todoService.update({ id, ...data });
+    this.todoService.update({ id, ...data });
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return this.todoService.delete(id);
+    this.todoService.delete(id);
   }
 }

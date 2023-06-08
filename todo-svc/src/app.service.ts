@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -14,6 +16,7 @@ import { DeleteTodoDto } from './dto/delete_todo.dto';
 export class AppService {
   constructor(
     @InjectModel(Todo.name) private readonly todoModel: Model<TodoDocument>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async handleCreateTodo(data: CreateTodoDto) {

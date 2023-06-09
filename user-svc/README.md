@@ -11,7 +11,7 @@ The User service handles user management and related functionalities in the Most
 
 ## 📚 Functionality
 
-The User service exposes APIs and message handlers to perform the following operations:
+The User service exposes APIs through the API Gateway and message handlers to perform the following operations:
 
 - User Registration: ✨
   - **Internal Kafka Topic**: `user.create` 
@@ -44,11 +44,9 @@ The User service is implemented as a NestJS module with the following components
 
 - `UserModel`: The Sequelize model representing the User entity and providing the necessary CRUD operations.
 - `UserService`: The service layer that encapsulates the business logic for user management operations.
-- `UserController`: The controller responsible for handling HTTP requests and orchestrating the service operations.
+- `UserController`: The controller responsible for handling Kafka messages and orchestrating the service operations.
 
 ### 🛣️ API Routes
-
-The User service exposes the following API routes:
 
 - `GET /users`: Retrieves a list of all users.
 - `GET /users/:id`: Retrieves a specific user by their ID.

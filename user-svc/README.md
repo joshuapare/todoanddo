@@ -1,73 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 🧑‍💼 User Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The User service handles user management and related functionalities in the Most Overcomplicated Todo App on the Planet. It allows users to register, retrieve, update, and delete their accounts. The service communicates with the Auth service and Todo service over Kafka for authentication, authorization, and collaboration.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Technologies Used
 
-## Description
+- NestJS: A progressive Node.js framework for building efficient and scalable server-side applications.
+- Sequelize: An ORM (Object-Relational Mapping) for Node.js that provides an easy-to-use API for interacting with MySQL databases.
+- MySQL: A popular open-source relational database management system.
+- Kafka: A distributed event streaming platform used for inter-service communication and collaboration.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📚 Functionality
 
-## Installation
+The User service exposes APIs and message handlers to perform the following operations:
 
-```bash
-$ npm install
-```
+- User Registration: ✨
+  - **Internal Kafka Topic**: `user.create` 
+  - **API Route**: `POST /users`
 
-## Running the app
+- User Retrieval: 🔍
+  - **Internal Kafka Topic**: `user.find`
+  - **API Route**: `GET /users`
 
-```bash
-# development
-$ npm run start
+- User Retrieval by ID: 🔍
+  - **Internal Kafka Topic**: `user.find.one`
+  - **API Route**: `GET /users/:id`
 
-# watch mode
-$ npm run start:dev
+- User Updates: ✏️
+  - **Internal Kafka Topic**: `user.update`
+  - **API Route**: `PUT /users/:id`
 
-# production mode
-$ npm run start:prod
-```
+- User Deletion: ❌
+  - **Internal Kafka Topic**: `user.delete`
+  - **API Route**: `DELETE /users/:id`
 
-## Test
+- User Validation: ✅
+  - **Internal Kafka Topic**: `user.validate`
 
-```bash
-# unit tests
-$ npm run test
+These routes can be accessed through the API Gateway, which forwards the requests to the User service via Kafka for processing.
 
-# e2e tests
-$ npm run test:e2e
+## 📝 Usage
 
-# test coverage
-$ npm run test:cov
-```
+The User service is implemented as a NestJS module with the following components:
 
-## Support
+- `UserModel`: The Sequelize model representing the User entity and providing the necessary CRUD operations.
+- `UserService`: The service layer that encapsulates the business logic for user management operations.
+- `UserController`: The controller responsible for handling HTTP requests and orchestrating the service operations.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 🛣️ API Routes
 
-## Stay in touch
+The User service exposes the following API routes:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- `GET /users`: Retrieves a list of all users.
+- `GET /users/:id`: Retrieves a specific user by their ID.
+- `POST /users`: Creates a new user.
+- `PUT /users/:id`: Updates an existing user by their ID.
+- `DELETE /users/:id`: Deletes a user by their ID.
 
-## License
+These routes can be accessed through the API Gateway, which handles the communication with the User service over Kafka.
 
-Nest is [MIT licensed](LICENSE).
+## ⚙️ Configuration
+
+To configure the User service, ensure that you have the necessary environment variables set, such as the MySQL database connection details and Kafka configuration. These variables can be defined in a `.env` file or through other means depending on your deployment setup.
+
+## 📦 Dependencies
+
+The User service has the following dependencies:
+
+- NestJS: The core framework for building the service.
+- Sequelize: The ORM used for interacting with the MySQL database.
+- MySQL: The backend database for storing user information.
+- Kafka: The messaging platform for communication between services.
+
+## 🤝 Contributions
+
+Contributions to the User service in the Most Overcomplicated Todo App on the Planet are welcome! If you find any issues or have suggestions for improvements, feel free to submit a pull request or open an issue in the repository.

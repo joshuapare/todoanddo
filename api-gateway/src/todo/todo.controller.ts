@@ -12,6 +12,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ClientKafka, RpcException } from '@nestjs/microservices';
+import { ApiBody } from '@nestjs/swagger';
 import { catchError, lastValueFrom, throwError } from 'rxjs';
 
 @Controller('todo')
@@ -38,6 +39,7 @@ export class TodoController implements OnModuleInit, OnModuleDestroy {
     await this.client.close();
   }
 
+  @ApiBody({ type: 'object' })
   @Post()
   async create(@Body() data: Record<string, unknown>) {
     return lastValueFrom(this.client.send('todo.create', data));
@@ -53,6 +55,7 @@ export class TodoController implements OnModuleInit, OnModuleDestroy {
     return lastValueFrom(this.client.send('todo.find.one', { id }));
   }
 
+  @ApiBody({ type: 'object' })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() data: Record<string, unknown>) {
     return lastValueFrom(this.client.send('todo.update', { id, ...data }));

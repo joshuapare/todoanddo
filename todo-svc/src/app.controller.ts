@@ -15,6 +15,11 @@ import { DeleteTodoDto } from './dto/delete_todo.dto';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @MessagePattern('todo.ping')
+  async handlePing() {
+    return this.appService.handlePing();
+  }
+
   @MessagePattern('todo.create')
   async handleCreateTodo(data: CreateTodoDto) {
     return this.appService.handleCreateTodo(data);

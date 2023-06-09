@@ -19,6 +19,10 @@ export class AppService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
+  async handlePing() {
+    return 'pong';
+  }
+
   async handleCreateTodo(data: CreateTodoDto) {
     const todo = new this.todoModel(data);
     await todo.save();

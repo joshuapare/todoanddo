@@ -11,13 +11,15 @@ volumes:
     driver: local
 
 services:
-  ui:
+  web:
     build:
-      context: ./ui
+      context: ./web
       target: dev
     volumes:
-      - ./ui/src:/app/src
-      - ./ui/public:/app/public
+      - ./web/src:/app/src
+      - ./web/public:/app/public
+      - ./web/pages:/app/pages
+      - ./web/middleware.ts:/app/middleware.ts
     ports:
       - "3330:3000"
       
@@ -28,6 +30,7 @@ services:
     volumes:
       - ./api-gateway/src:/app/src
       - ./api-gateway/public:/app/public
+      - ./api-gateway/proto:/app/proto
     ports:
       - "3456:3000"
 
@@ -38,8 +41,10 @@ services:
     volumes:
       - ./user-svc/src:/app/src
       - ./user-svc/public:/app/public
+      - ./user-svc/proto:/app/proto
     ports:
       - "3331:3000"
+      - "5001:5000"
 
   auth-svc:
     build:
